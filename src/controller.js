@@ -4,17 +4,6 @@ const mysql = require('mysql');
 const fs = require('fs');
 const { nanoid } = require('nanoid');
 
-const availableEndpoints = [
-    {
-        method: "GET",
-        getUsers: "/users"
-    },
-    {
-        method: "POST",
-        createUser: "/user"
-    }
-]
-
 exports.getMessages = function(req, res) {
     const reqUrl = url.parse(req.url, true);
     
@@ -28,6 +17,7 @@ exports.getMessages = function(req, res) {
     };
     res.statusCode = 200;
     res.setHeader('content-Type', 'Application/json');
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.end(JSON.stringify(response));
 }
 
@@ -41,9 +31,8 @@ exports.sendMessage = function(req, res) {
     req.on('end', function () {
         let jsonBody = JSON.parse(body);
         let newBody = {id: nanoid(5), time: Date.now(), ...jsonBody};
-
         let updatedMessages = messages.messages.push(newBody);
-
+        messages.messages.sort((a, b) => b.time - a.time);
         fs.writeFileSync('./src/userData.json', JSON.stringify(messages), 'utf8', (err) => {
             if(err) {
                 console.log(err);
@@ -67,15 +56,14 @@ exports.deleteMessage = function(req, res) {
         }
     });
 
-    res.statusCode = 200;
-    res.setHeader('content-Type', 'Application/json');
-    res.end(JSON.stringify({"message": "Successfully deleted!"}));
+    res.statusCode = 204;
+    //res.setHeader('content-Type', 'Application/json');
+    res.end(/*JSON.stringify({"message": "Successfully deleted!"})*/);
 }
 
 exports.viewMessage = function(req, res) {
     const reqUrl = url.parse(req.url, true);
     let message = messages.messages.find(message => message.id === reqUrl.query.id);
-
     var response = message;
     res.statusCode = 200;
     res.setHeader('content-Type', 'Application/json');
@@ -98,10 +86,11 @@ exports.forwardMessage = function(req, res) {
             time: Date.now(),
             remetente: jsonBody.remetente,
             destinatario: jsonBody.destinatario,
-            assunto: originalMessage.assunto,
+            assunto: "ENC: " + originalMessage.assunto,
             corpo: newMessage
         }
         let updatedMessages = messages.messages.push(newBody);
+        messages.messages.sort((a, b) => b.time - a.time);
         fs.writeFileSync('./src/userData.json', JSON.stringify(messages), 'utf8', (err) => {
             if(err) {
                 console.log(err);
@@ -136,6 +125,7 @@ exports.answerMessage = function(req, res) {
             corpo: newMessage
         }
         let updatedMessages = messages.messages.push(newBody);
+        messages.messages.sort((a, b) => b.time - a.time);
         fs.writeFileSync('./src/userData.json', JSON.stringify(messages), 'utf8', (err) => {
             if(err) {
                 console.log(err);
@@ -151,10 +141,10 @@ exports.answerMessage = function(req, res) {
 exports.invalidUrl = function(req, res) {
     var response = [
         {
-            "message": "oops! that is a wrong endpoint, here are the available endpoints "
-        },
-        availableEndpoints
+            "message": "Not found."
+        }
     ]
+    
     res.statusCode = 404;
     res.setHeader('content-Type', 'Application/json');
     res.end(JSON.stringify(response));

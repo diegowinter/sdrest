@@ -1,1 +1,12 @@
-{"messages":[{"id":"QVECX","time":1608135995145,"remetente":"diego.winter@outlook.com","destinatario":"xbox@microsoft.com","assunto":"Meu currículo","corpo":"Em anexo meu currículo para trabalhar com vocês aaaaaa"},{"id":"v7VsS","time":1608136349463,"remetente":"diego.winter@outlook.com","destinatario":"outro@example.com","assunto":"Meu currículo","corpo":"Veja esse email que enviei pra MS hahaha\nEm anexo meu currículo para trabalhar com vocês aaaaaa"},{"id":"net_n","time":1608136380355,"remetente":"outro@example.com","destinatario":"diego.winter@outlook.com","assunto":"RE: Meu currículo","corpo":"Boa sorte, amigo\n ------------------ \nVeja esse email que enviei pra MS hahaha\nEm anexo meu currículo para trabalhar com vocês aaaaaa"}]}
+{
+    "messages": [
+        {
+            "id": "DbR8g",
+            "time": 1608424722263,
+            "remetente": "diego.winter@outlook.com",
+            "destinatario": "diego@diego.com",
+            "assunto": "Assunto",
+            "corpo": "Corpo"
+        }
+    ]
+}

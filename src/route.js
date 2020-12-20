@@ -3,6 +3,16 @@ const url = require('url');
 
 module.exports = http.createServer((req, res) => {
 
+    res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Request-Method', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, DELETE');
+	res.setHeader('Access-Control-Allow-Headers', '*');
+	if ( req.method === 'OPTIONS' ) {
+		res.writeHead(200);
+		res.end();
+		return;
+	}
+
     var userOps = require('./controller.js'); // importing the main logic
     const reqUrl =  url.parse(req.url, true);
     const params = JSON.parse(JSON.stringify(reqUrl.query));
