@@ -139,7 +139,7 @@ exports.invalidUrl = function(req, res) {
 }
 
 function writeFile(data) {
-    fs.writeFileSync('./src/userData.json', JSON.stringify(data), 'utf8', (err) => {
+    fs.writeFileSync('./tmp/userData.json', JSON.stringify(data), 'utf8', (err) => {
         if(err) {
             console.log(err);
         }
