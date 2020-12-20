@@ -1,3 +1,11 @@
+html * {
+    font-family: Arial !important;
+}
+
+button {
+    margin: 0px 20px;
+}
+
 .leftside, .rightside {
     height: 94vh;
     width: 100%;
@@ -58,6 +66,17 @@
 
 .editor-input {
     width: 100%;
+}
+
+.message-body {
+    white-space: pre-line;
+}
+
+.welcome-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
 }
 
 h1, h2 {

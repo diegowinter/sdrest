@@ -5,27 +5,12 @@
     <title>sdREST</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <link href="style.css" rel="stylesheet">
+    <meta charset="UTF-8">
 </head>
 
 <body>
-    <style>
-        html * {
-            font-family: Arial !important;
-        }
-
-        #title {
-            align-items: center;
-            justify-content: center;
-        }
-
-
-
-        button {
-            margin: 0px 20px;
-        }
-    </style>
+    <script type="text/javascript" src="script.js"></script>
 
     <div class="row no-gutters">
         <div class="col-md-3 no-gutters">
@@ -41,7 +26,7 @@
         </div>
         <div class="col-md-3 no-gutters">
             <div class="header-rightside">
-                <button onclick="openMessageEditor()">Nova mensagem</button>
+                <button id="button-new-message" disabled onclick="openMessageEditor()">Nova mensagem</button>
             </div>
         </div>
     </div>
@@ -49,119 +34,19 @@
         <div class="col-md-4 no-gutters">
             <div class="leftside">
                 <div id="messages"></div>
+                <div class="welcome-message" id="welcome-message-left">
+                    <p>Conecte-se para ver suas mensagens</p>
+                </div>
             </div>
         </div>
         <div class="col-md-8 no-gutters">
-            <div id="msg-panel" class="rightside"></div>
+            <div id="msg-panel" class="rightside">
+                <div class="welcome-message" id="welcome-message-right">
+                    <p>As mensagens abrirão aqui</p>
+                </div>
+            </div>
         </div>
     </div>
-
-    <script>
-
-        let email = "";
-        async function carregarMensagens() {
-            document.getElementById('messages').innerHTML = "";
-            email = document.getElementById("email").value;
-
-            if (email === null || email === '') {
-                alert('Por favor, insira um filme válido');
-                return;
-            }
-
-            fetch(`http://127.0.0.1:3000/messages?user=${email}`).then(async response => {
-                const data = await response.json();
-
-                data.selectedMessages.forEach(elemento => {
-                    if (elemento.remetente === email) {
-                        document.getElementById('messages').innerHTML += `
-                            <div class="message-item" onclick=abrirMensagem('${elemento.id}')>
-                                <p class="header-preview">Enviada</p>
-                                <div id="messageTitle"><h3>${elemento.assunto}</h3></div>
-                                <p class="text-preview">${elemento.corpo}</p>
-                            </div>
-                        `;
-                    } else {
-                        document.getElementById('messages').innerHTML += `
-                            <div class="message-item" onclick=abrirMensagem('${elemento.id}')>
-                                <p class="header-preview">Recebida</p>
-                                <h3>${elemento.assunto}</h3>
-                                <p class="text-preview">${elemento.corpo}</p>
-                            </div>
-                        `;
-                    }
-                });
-            }).catch(error => console.error('Error: ', error));
-        }
-
-        async function abrirMensagem(id) {
-            document.getElementById('msg-panel').innerHTML = "";
-            fetch(`http://127.0.0.1:3000/viewMessage?id=${id}`).then(async response => {
-                const data = await response.json();
-
-                if (email === data.remetente) {
-                    document.getElementById('msg-panel').innerHTML += `
-                        <div align="center">
-                            <button>Encaminhar</button>
-                            <button onClick=excluirMensagem('${data.id}')>Excluir</button> 
-                        </div>
-                    `;
-                } else {
-                    document.getElementById('msg-panel').innerHTML += `
-                        <div align="center">
-                            <button>Responder</button>
-                            <button>Encaminhar</button>
-                            <button onClick=excluirMensagem('${data.id}')>Excluir</button> 
-                        </div>
-                    `;
-                }
-
-                document.getElementById('msg-panel').innerHTML += `
-                    <p id="text-message">De: ${data.remetente}</p>
-                    <p id="text-message">Para: ${data.destinatario}</p><br>
-                    <h4>${data.assunto}</h4>
-                    <p id="text-message">${data.corpo}</p>
-                `;
-            }).catch(error => console.error('Error: ', error));
-        }
-
-        function openMessageEditor() {
-            document.getElementById('msg-panel').innerHTML = "";
-            document.getElementById('msg-panel').innerHTML = `
-                <input value=${email} class="editor-input" disabled><br>
-                <input id="receipt-mail" type="email" class="editor-input" placeholder="E-mail do destinatário" required><br>
-                <input id="subject" class="editor-input" placeholder="Assunto" required><br>
-                <textarea id="message-body" rows="10" cols="50" class="editor-input" placeholder="Sua mensagem aqui..." required></textarea><br>
-                <button onClick=sendMessage()>Enviar</button>
-            `;
-        }
-
-        async function sendMessage() {
-            receipt = document.getElementById("receipt-mail").value;
-            subject = document.getElementById("subject").value;
-            messageBody = document.getElementById("message-body").value;
-            document.getElementById('msg-panel').innerHTML = "";
-            fetch("http://127.0.0.1:3000/sendMessage?",
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        "remetente": email,
-                        "destinatario": receipt,
-                        "assunto": subject,
-                        "corpo": messageBody
-                    })
-                }
-            ).catch(error => console.error('Error:', error));
-        }
-
-        async function excluirMensagem(id) {
-            fetch(`http://127.0.0.1:3000/deleteMessage?id=${id}`,
-                {
-                    method: "DELETE"
-                }
-            ).catch(error => console.error('Error:', error));
-            document.getElementById('msg-panel').innerHTML = "";
-        }
-    </script>
 </body>
 
 </html>
