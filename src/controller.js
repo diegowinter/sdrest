@@ -33,11 +33,8 @@ exports.sendMessage = function(req, res) {
         let newBody = {id: nanoid(5), time: Date.now(), ...jsonBody};
         let updatedMessages = messages.messages.push(newBody);
         messages.messages.sort((a, b) => b.time - a.time);
-        fs.writeFileSync('./src/userData.json', JSON.stringify(messages), 'utf8', (err) => {
-            if(err) {
-                console.log(err);
-            }
-        });
+        
+        writeFile(messages);
 
         res.statusCode = 201;
         res.setHeader('content-Type', 'Application/json');
@@ -49,14 +46,10 @@ exports.deleteMessage = function(req, res) {
     const reqUrl = url.parse(req.url, true);
     let updatedMessages = messages.messages.filter(message => message.id !== reqUrl.query.id);
     updatedMessages = {"messages": updatedMessages};
-    
+
     console.log(updatedMessages);
 
-    fs.writeFileSync('./src/userData.json', JSON.stringify(updatedMessages), 'utf8', (err) => {
-        if(err) {
-            console.log(err);
-        }
-    });
+    writeFile(updatedMessages);
 
     res.statusCode = 204;
     res.end();
@@ -92,11 +85,8 @@ exports.forwardMessage = function(req, res) {
         }
         let updatedMessages = messages.messages.push(newBody);
         messages.messages.sort((a, b) => b.time - a.time);
-        fs.writeFileSync('./src/userData.json', JSON.stringify(messages), 'utf8', (err) => {
-            if(err) {
-                console.log(err);
-            }
-        });
+        
+        writeFile(messages);
 
         res.statusCode = 201;
         res.setHeader('content-Type', 'Application/json');
@@ -127,11 +117,8 @@ exports.answerMessage = function(req, res) {
         }
         let updatedMessages = messages.messages.push(newBody);
         messages.messages.sort((a, b) => b.time - a.time);
-        fs.writeFileSync('./src/userData.json', JSON.stringify(messages), 'utf8', (err) => {
-            if(err) {
-                console.log(err);
-            }
-        });
+        
+        writeFile(messages);
 
         res.statusCode = 201;
         res.setHeader('content-Type', 'Application/json');
@@ -149,4 +136,12 @@ exports.invalidUrl = function(req, res) {
     res.statusCode = 404;
     res.setHeader('content-Type', 'Application/json');
     res.end(JSON.stringify(response));
+}
+
+function writeFile(data) {
+    fs.writeFileSync('./src/userData.json', JSON.stringify(data), 'utf8', (err) => {
+        if(err) {
+            console.log(err);
+        }
+    });
 }
