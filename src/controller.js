@@ -57,8 +57,7 @@ exports.deleteMessage = function(req, res) {
     });
 
     res.statusCode = 204;
-    //res.setHeader('content-Type', 'Application/json');
-    res.end(/*JSON.stringify({"message": "Successfully deleted!"})*/);
+    res.end();
 }
 
 exports.viewMessage = function(req, res) {
