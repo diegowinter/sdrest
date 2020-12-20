@@ -45,9 +45,9 @@ exports.sendMessage = function(req, res) {
 exports.deleteMessage = function(req, res) {
     const reqUrl = url.parse(req.url, true);
     let updatedMessages = messages.messages.filter(message => message.id !== reqUrl.query.id);
-    updatedMessages = {"messages": updatedMessages};
-
-    console.log(updatedMessages);
+    let messagesToWrite = {"messages": updatedMessages};
+    messagesToWrite.messages.sort((a, b) => b.time - a.time);
+    console.log(messagesToWrite);
 
     writeFile(updatedMessages);
 
