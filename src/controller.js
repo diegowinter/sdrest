@@ -49,6 +49,8 @@ exports.deleteMessage = function(req, res) {
     const reqUrl = url.parse(req.url, true);
     let updatedMessages = messages.messages.filter(message => message.id !== reqUrl.query.id);
     updatedMessages = {"messages": updatedMessages};
+    
+    console.log(updatedMessages);
 
     fs.writeFileSync('./src/userData.json', JSON.stringify(updatedMessages), 'utf8', (err) => {
         if(err) {
