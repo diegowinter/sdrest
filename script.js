@@ -12,7 +12,7 @@ async function carregarMensagens() {
     document.getElementById('msg-panel').innerHTML = "";
     
 
-    fetch(`http://127.0.0.1:3000/messages?user=${email}`).then(async response => {
+    fetch(`https://sdrest-server.herokuapp.com/messages?user=${email}`).then(async response => {
         const data = await response.json();
 
         data.selectedMessages.forEach(elemento => {
@@ -39,7 +39,7 @@ async function carregarMensagens() {
 
 async function abrirMensagem(id) {
     document.getElementById('msg-panel').innerHTML = "";
-    fetch(`http://127.0.0.1:3000/viewMessage?id=${id}`).then(async response => {
+    fetch(`https://sdrest-server.herokuapp.com/viewMessage?id=${id}`).then(async response => {
         const data = await response.json();
         if (email === data.remetente) {
             document.getElementById('msg-panel').innerHTML += `
@@ -82,7 +82,7 @@ async function sendMessage() {
     let subject = document.getElementById("subject").value;
     let messageBody = document.getElementById("message-body").value;
     document.getElementById('msg-panel').innerHTML = "";
-    fetch("http://127.0.0.1:3000/sendMessage?",
+    fetch("https://sdrest-server.herokuapp.com/sendMessage?",
         {
             method: "POST",
             body: JSON.stringify({
@@ -102,7 +102,7 @@ async function sendMessage() {
 }
 
 async function openMessageEditorAnswer(id) {
-    fetch(`http://127.0.0.1:3000/viewMessage?id=${id}`).then(async response => {
+    fetch(`https://sdrest-server.herokuapp.com/viewMessage?id=${id}`).then(async response => {
         const data = await response.json();
         document.getElementById('msg-panel').innerHTML = "";
         document.getElementById('msg-panel').innerHTML = `
@@ -118,7 +118,7 @@ async function openMessageEditorAnswer(id) {
 async function sendAnswer(id) {
     let messageBody = document.getElementById("message-body").value;
     document.getElementById('msg-panel').innerHTML = "";
-    fetch("http://127.0.0.1:3000/answerMessage?",
+    fetch("https://sdrest-server.herokuapp.com/answerMessage?",
         {
             method: "POST",
             body: JSON.stringify({
@@ -136,7 +136,7 @@ async function sendAnswer(id) {
 }
 
 async function openMessageEditorForward(id) {
-    fetch(`http://127.0.0.1:3000/viewMessage?id=${id}`).then(async response => {
+    fetch(`https://sdrest-server.herokuapp.com/viewMessage?id=${id}`).then(async response => {
         const data = await response.json();
         document.getElementById('msg-panel').innerHTML = "";
         document.getElementById('msg-panel').innerHTML = `
@@ -155,7 +155,7 @@ async function forwardMessage(id) {
     let receipt = document.getElementById("receipt-mail").value;
     let messageBody = document.getElementById("message-body").value;
     document.getElementById('msg-panel').innerHTML = "";
-    fetch("http://127.0.0.1:3000/forwardMessage?",
+    fetch("https://sdrest-server.herokuapp.com/forwardMessage?",
         {
             method: "POST",
             body: JSON.stringify({
@@ -175,7 +175,7 @@ async function forwardMessage(id) {
 }
 
 async function excluirMensagem(id) {
-    fetch(`http://127.0.0.1:3000/deleteMessage?id=${id}`,
+    fetch(`https://sdrest-server.herokuapp.com/deleteMessage?id=${id}`,
         {
             method: "DELETE"
         }
